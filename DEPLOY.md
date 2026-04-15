@@ -15,9 +15,7 @@
 3. **Deploy**
 4. **URL:** `https://YOUR-PROJECT.pages.dev`
 
-## 4. GitHub + Auto-deploy
 
-1. https://github.com/CABLord/vavoo.to → Upload all files
 2. Cloudflare Pages → Connect Git → CABLord/vavoo.to → `/` output dir
 3. Push to GitHub → auto-deploys!
 

@@ -1,0 +1,4 @@
+kodi-addon-cloudflare-migration/
+*.log
+node_modules/
+.DS_Store
