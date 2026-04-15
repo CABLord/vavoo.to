@@ -356,7 +356,7 @@
     // API-Hilfsfunktionen (GET mit Query)
     // ============================================================
     async function api(path, opts = {}) {
-      const url = new URL(path, API);
+      const url = new URL(path.replace(/^\/+/, ''), API + '/');
       if (opts.query) {
         Object.entries(opts.query).forEach(([k,v]) => url.searchParams.set(k, v));
         delete opts.query;
