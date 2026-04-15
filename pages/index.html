@@ -319,6 +319,11 @@
 
   <script>
     // ============================================================
+    // API Base (Cloudflare Worker)
+    // ============================================================
+    const API = 'https://vavoo-api.cabo-lorik-bajgora.workers.dev/';
+
+    // ============================================================
     // Zustand
     // ============================================================
     const S = {
@@ -340,17 +345,30 @@
     const LOGO_BASE = 'https://michaz1988.github.io/logos/';
     const TMDB_IMG = 'https://image.tmdb.org/t/p/';
 
+
     // Bekannte Kanal-Logos
     const CHAN_ICONS = ['13thstreet','3sat','animalplanet','anixe','ard','ardalpha','arte','atv','atv2','automotorsport','axnblack','axnwhite','br','cartoonito','cartoonnetwork','comedycentral','curiositychannel','fix&foxi','dazn1','dazn2','deluxemusic','nationalgeographic','dmax','eurosport1','eurosport2','nickjunior','superrtl','heimatkanal','history','hr','jukebox','kabel1doku','pro7','pro7maxx','pro7fun','rtl2','kika','kinowelt','mdr','universaltv','discovery','mtv','n24doku','natgeowild','sky1','ndr','nickelodeon','nitro','romancetv','ntv','one','orf1','orf2','orf3','orfsportplus','phoenix','geotv','puls24','puls4','rbb','ric','motorvision','rtl','rtlcrime','rtlliving','kabel1','rtlpassion','rtlup','sat1','sat1emotions','sat1gold','servustv','silverline','sixx','skyatlantic','skycinemaaction','skycinemaclassics','skycinemafamily','skycinemahighlights','skycinemapremieren','skycrime','skydocumentaries','skykrimi','skynature','skyreplay','skyshowcase','spiegelgeschichte','kabel1classics','sport1','sportdigital','swr','syfy','tagesschau24','tele5','tlc','toggoplus','crime+investigation','vox','voxup','warnertvcomedy','warnertvfilm','warnertvserie','wdr','welt','weltderwunder','zdf','zdfinfo','zdfneo','zeeone','skycinemathriller'];
 
     // ============================================================
-    // API-Hilfsfunktionen
+    // API-Hilfsfunktionen (GET mit Query)
+    // ============================================================
+    // ============================================================
+    // API-Hilfsfunktionen (GET mit Query)
     // ============================================================
     async function api(path, opts = {}) {
-      const res = await fetch(API + path, opts);
+      const url = new URL(API + path);
+      if (opts.query) {
+        Object.entries(opts.query).forEach(([k,v]) => url.searchParams.set(k, v));
+        delete opts.query;
+      }
+      const res = await fetch(url, opts);
       if (!res.ok) throw new Error(`API ${res.status}: ${path}`);
       return res.json();
     }
+
+    // ============================================================
+    // API-POST (Body)
+    // ============================================================
     async function apiPost(path, body) {
       return api(path, {
         method: 'POST',
@@ -697,7 +715,7 @@
     async function renderList(el, listId, title, backRoute) {
       el.innerHTML = '<div class="loading"><div class="spinner"></div> Lade Inhalte...</div>';
       try {
-        const data = await api(`/api/ccapi/list?id=${encodeURIComponent(listId)}`);
+        const data = await api('/api/ccapi/list', { query: { id: listId } });
         const items = (data?.data || data || []).filter(i => i.description);
         const next = data?.next;
 
@@ -711,7 +729,7 @@
         // Metadaten parallel laden
         const results = await Promise.allSettled(
           items.slice(0, 40).map(async item => {
-            const meta = await api(`/api/tmdb/${item.id.replace('series', 'tv')}?language=de-DE`);
+            const meta = await api('/api/meta', { query: { id: item.id.replace('series', 'tv') } });
             return { item, meta };
           })
         );
@@ -803,7 +821,7 @@
     async function renderSeasons(el, seriesId) {
       el.innerHTML = '<div class="loading"><div class="spinner"></div> Lade Staffeln...</div>';
       try {
-        const meta = await api(`/api/tmdb/tv/${seriesId}?language=de-DE`);
+        const meta = await api('/api/meta', { query: { id: `series.${seriesId}` } });
         const seasons = (meta.seasons || []).filter(s => s.season_number > 0);
         const title = meta.name || '';
         el.innerHTML = `
@@ -900,7 +918,7 @@
       res.innerHTML = '<div class="loading"><div class="spinner"></div> Suche...</div>';
       try {
         const listId = `${type}.search=${query}`;
-        const data = await api(`/api/ccapi/list?id=${encodeURIComponent(listId)}`);
+        const data = await api('/api/ccapi/list', { query: { id: listId } });
         const items = (data?.data || data || []).filter(i => i.description);
         if (!items.length) { res.innerHTML = '<p style="color:var(--muted);padding:20px 0">Keine Ergebnisse</p>'; return; }
 

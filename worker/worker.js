@@ -196,10 +196,27 @@ export default {
     if (request.method === 'OPTIONS') return new Response(null, { headers: CORS });
     const { pathname: p, searchParams: q } = new URL(request.url);
     try {
+      // Explicit /api/ccapi/list for frontend compatibility (fallback to cc2)
+      if (p === '/api/ccapi/list') {
+        console.log('CCAPI list:', Object.fromEntries(q));
+        try {
+          const data = await cc2('list', Object.fromEntries(q));
+          return json(data || { error: 'No data from CCAPI' });
+        } catch (e) {
+          console.error('CCAPI error:', e);
+          return json({ error: 'CCAPI failed: ' + e.message }, 500);
+        }
+      }
       switch (p) {
         // Inhalt durchsuchen (CCAPI + browse)
         case '/api/ccapi': {
-          return json(await cc2('list', Object.fromEntries(q)));
+          console.log('CCAPI generic:', Object.fromEntries(q));
+          try {
+            return json(await cc2('list', Object.fromEntries(q)));
+          } catch (e) {
+            console.error('CCAPI cc2 error:', e);
+            return json({ error: 'CCAPI cc2 failed: ' + e.message }, 500);
+          }
         }
         case '/api/browse': {
           const id = q.get('id'), cursor = q.get('cursor') || '0';
