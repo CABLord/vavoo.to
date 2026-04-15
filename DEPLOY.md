@@ -19,7 +19,19 @@
 2. **Cloudflare Pages Git Deploy (Fixed)**:
    - Connect Git → CABLord/vavoo.to
    - **Framework preset: None**
+   - **Build command: `cp worker/worker.js . && npx wrangler deploy`**
+>>>>>>> 63328d24f505c215425c389d8587624a58c8057d
+   - **Build output directory: `pages`**
+   - **Root directory: `/`**
+3. Push changes to GitHub → auto-deploys Worker + static pages!
+=======
 npx wrangler deploy
+   - **Build output directory: `pages`**
+   - **Root directory: `/`**
+3. Push changes to GitHub → auto-deploys Worker + static pages!
+=======
+   - **Build command: `cp worker/worker.js . && npx wrangler deploy`**
+>>>>>>> 63328d24f505c215425c389d8587624a58c8057d
    - **Build output directory: `pages`**
    - **Root directory: `/`**
 3. Push changes to GitHub → auto-deploys Worker + static pages!
