@@ -1,0 +1,3 @@
+name = "vavoo-api"
+main = "worker/worker.js"
+compatibility_date = "202
