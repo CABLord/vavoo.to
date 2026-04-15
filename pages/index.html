@@ -321,7 +321,7 @@
     // ============================================================
     // API Base (Cloudflare Worker)
     // ============================================================
-const API = 'https://vavoo-api.cabo-lorik-bajgora.workers.dev';
+    const API = 'https://vavoo-api.cabo-lorik-bajgora.workers.dev';
 
     // ============================================================
     // Zustand
@@ -356,7 +356,7 @@ const API = 'https://vavoo-api.cabo-lorik-bajgora.workers.dev';
     // API-Hilfsfunktionen (GET mit Query)
     // ============================================================
     async function api(path, opts = {}) {
-      const url = new URL(API + path);
+      const url = new URL(path, API);
       if (opts.query) {
         Object.entries(opts.query).forEach(([k,v]) => url.searchParams.set(k, v));
         delete opts.query;
