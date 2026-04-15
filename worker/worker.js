@@ -197,7 +197,10 @@ export default {
     const { pathname: p, searchParams: q } = new URL(request.url);
     try {
       switch (p) {
-        // Inhalt durchsuchen
+        // Inhalt durchsuchen (CCAPI + browse)
+        case '/api/ccapi': {
+          return json(await cc2('list', Object.fromEntries(q)));
+        }
         case '/api/browse': {
           const id = q.get('id'), cursor = q.get('cursor') || '0';
           const k = `b:${id}:${cursor}`;
