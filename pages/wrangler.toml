@@ -1,3 +1,8 @@
-name = "vavoo-api"
-main = "worker/worker.js"
-compatibility_date = "202
+[pages]
+compatibility_date = "2024-10-01"
+compatibility_flags = [ "2024-10-16" ]
+
+output_directory = "."
+
+[env.production.vars]
+API_BASE = "https://vavoo-api.cabo-lorik-bajgora.workers.dev/"

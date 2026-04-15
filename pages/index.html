@@ -321,7 +321,7 @@
     // ============================================================
     // API Base (Cloudflare Worker)
     // ============================================================
-    const API = 'https://vavoo-api.cabo-lorik-bajgora.workers.dev/';
+const API = (typeof import.meta !== 'undefined' && import.meta.env?.API_BASE) ? import.meta.env.API_BASE : 'https://vavoo-api.cabo-lorik-bajgora.workers.dev/';
 
     // ============================================================
     // Zustand

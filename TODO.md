@@ -18,10 +18,10 @@
   `wrangler deploy` (worker)  
   Upload `pages/` to Cloudflare Pages.
 
-- [ ] **Step 5: Verify Live**  
+- ✅ **Step 5: Verify Live**  
   Test https://netstreamz.pages.dev → Live/Filme (no 404s).
 
-- [ ] **Step 6: GitHub**  
+- ✅ **Step 6: GitHub**  
   Push to https://github.com/CABLord/vavoo.to  
   Connect Git to Cloudflare Pages (auto-deploy).
 
